@@ -1,0 +1,14 @@
+.walletCard {
+    margin: 1rem;
+}
+
+.switchNetwork {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button_switch_network {
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
