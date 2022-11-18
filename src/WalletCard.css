@@ -2,13 +2,34 @@
     margin: 1rem;
 }
 
-.switchNetwork {
+.check_entry {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.button_switch_network {
+.button_check_entry {
     margin-top: -0.5rem;
     margin-bottom: 1rem;
+}
+
+.multiSendDisplay {
+    display: flex;
+    flex-flow: column;
+    grid-gap: 0.5em;
+    gap: 0.5em;
+    border: 1px solid #415d9f;
+    border-radius: 1.71em;
+    padding-top: 0.5em;
+    padding-bottom: 1em;
+}
+
+.result_check_data {
+    display: flex;
+    flex-flow: column;
+}
+
+.form-control {
+    height: 10em;
+    width: 93%;
 }
