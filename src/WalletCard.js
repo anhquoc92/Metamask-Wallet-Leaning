@@ -2,9 +2,10 @@ import React from "react";
 import { useState } from "react";
 import { ethers } from "ethers";
 import "./WalletCard.css";
-import entryContract from "./blockchain/checkEntry";
-import checkAmountEntry from "./blockchain/checkAmountEntry";
-import multiSendContract from "./blockchain/multiSend";
+import EntryContract from "./blockchain/CheckEntry";
+import CheckAmountEntry from "./blockchain/CheckAmountEntry";
+import MultiSendContract from "./blockchain/MultiSendContract";
+import CheckBalanceNFT from "./blockchain/CheckBalanceNFT.jsx";
 
 const WalletCard = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -12,8 +13,9 @@ const WalletCard = () => {
   const [userBalance, setUserBalance] = useState(0);
   const [connButtonText, setConnButtonText] = useState("Connect Wallet");
 
-  const [walletBegin, setWalletBegin] = useState('__')
-  const [amountBegin, setAmountBegin] = useState('__')
+  const [walletBegin, setWalletBegin] = useState("__");
+  const [amountBegin, setAmountBegin] = useState("__");
+  const [nftOwn, setNftOwn] = useState("__")
 
   const connectWalletHandler = async () => {
     // check if Metamask is installed
@@ -50,32 +52,40 @@ const WalletCard = () => {
   };
 
   const onclickCheckEntry = async () => {
-    entryContract(defaultAccount);
+    EntryContract(defaultAccount);
   };
 
   const onclickCheckAmountEntry = async () => {
-    checkAmountEntry(defaultAccount);
+    CheckAmountEntry(defaultAccount);
   };
 
   const onclickMultiSend = async () => {
-    multiSendContract(defaultAccount);
+    MultiSendContract(defaultAccount);
+  };
+
+  const onclickCheckBalanceNFT = async () => {
+    console.log("TU TU DA");
+    console.log("DUNG CLICK NUA");
+    const NFT_ADDRESS = document.getElementById("nft_address").value
+    console.log(NFT_ADDRESS)
+    // const setBalanceNFT = await CheckBalanceNFT(defaultAccount, NFT_ADDRESS);
+    setNftOwn(await CheckBalanceNFT(defaultAccount, NFT_ADDRESS))
   };
 
   const checkData = () => {
     const addressReceiverData = document.getElementById("amount").value;
     const totalWallet = addressReceiverData.split(";").length;
     const eachReceiveWallets = addressReceiverData.split(";");
-  
+
     let totalValueSend = 0;
-  
+
     for (let i = 0; i < totalWallet; i++) {
       const eachSendWallet = eachReceiveWallets[i].split("=")[1];
       totalValueSend += parseFloat(eachSendWallet);
     }
     setWalletBegin(totalWallet);
     setAmountBegin(totalValueSend.toFixed(4));
-  }
-
+  };
 
   // coi su thay doi account
   window.ethereum.on("accountsChanged", accountChangedHandler);
@@ -93,6 +103,7 @@ const WalletCard = () => {
       <div className="balanceDisplay">
         <h3>Balance: {userBalance.toFixed(4)} ETH </h3>
       </div>
+
       <div className="check_entry">
         <h2>{"Check"}</h2>
         <button onClick={onclickCheckEntry} className="button_check_entry">
@@ -104,11 +115,28 @@ const WalletCard = () => {
         >
           Check Amount Entry
         </button>
+        <div className="check_balance_nft">
+        <span>Contract Collection: </span>
+        <input type="text" id="nft_address"/>
+        <select name="chooseTokenNft" id="token_nft">
+          <option value="aaaaa">ERC721</option>
+          <option value="bbbbb">ERC1155</option>
+        </select>
+          <button
+            onClick={onclickCheckBalanceNFT}
+            className="button_check_entry"
+          >
+            Check Balance NFT
+          </button>
+          <span> : {nftOwn} NFTs</span>
+        </div>
       </div>
       <div className="multiSendDisplay">
         <h2>{"Multi-Sender"}</h2>
         <div className="list_of_address">
-          <h3>Data: {"{receiverAddress1}={value1};{receiverAddress2}={value2}"}</h3>
+          <h3>
+            Data: {"{receiverAddress1}={value1};{receiverAddress2}={value2}"}
+          </h3>
           <textarea
             id="amount"
             className="form-control"
@@ -124,7 +152,9 @@ const WalletCard = () => {
             <span>AmountWallet: {walletBegin}</span>
             <span>AmountToken: {amountBegin}</span>
           </div>
-          <button className="check_total_send" onClick={checkData}>CheckData</button>
+          <button className="check_total_send" onClick={checkData}>
+            CheckData
+          </button>
         </div>
 
         <div className="button_action">

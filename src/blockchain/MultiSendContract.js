@@ -126,7 +126,7 @@ const contractABI = [
   },
 ];
 
-const multiSendContract = async (defaultAccount) => {
+const MultiSendContract = async (defaultAccount) => {
   //creat web3
   const { ethereum } = window;
   window.web3 = new Web3(ethereum);
@@ -170,4 +170,4 @@ const multiSendContract = async (defaultAccount) => {
 
 };
 
-export default multiSendContract;
+export default MultiSendContract;

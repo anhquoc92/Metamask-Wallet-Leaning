@@ -30,7 +30,7 @@ const contractABI = [
   },
 ];
 
-const checkAmountEntry = async (defaultAccount) => {
+const CheckAmountEntry = async (defaultAccount) => {
   //creat web3
   const { ethereum } = window;
   window.web3 = new Web3(ethereum);
@@ -51,4 +51,4 @@ const checkAmountEntry = async (defaultAccount) => {
     
 };
 
-export default checkAmountEntry;
+export default CheckAmountEntry;
