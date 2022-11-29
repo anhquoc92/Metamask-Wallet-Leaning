@@ -6,6 +6,8 @@ import EntryContract from "./blockchain/CheckEntry";
 import CheckAmountEntry from "./blockchain/CheckAmountEntry";
 import MultiSendContract from "./blockchain/MultiSendContract";
 import CheckBalanceNFT from "./blockchain/CheckBalanceNFT.jsx";
+import TokenList from "./currency/token_list_bsc.json";
+import CheckBalanceToken from "./blockchain/CheckBalanceToken.jsx";
 
 const WalletCard = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -15,7 +17,9 @@ const WalletCard = () => {
 
   const [walletBegin, setWalletBegin] = useState("__");
   const [amountBegin, setAmountBegin] = useState("__");
-  const [nftOwn, setNftOwn] = useState("__")
+  const [nftOwn, setNftOwn] = useState("__");
+  const [tokenOwn, setTokenOwn] = useState("__");
+  const [selectToken, setSelectToken] = useState(TokenList[0]);
 
   const connectWalletHandler = async () => {
     // check if Metamask is installed
@@ -63,13 +67,15 @@ const WalletCard = () => {
     MultiSendContract(defaultAccount);
   };
 
+  const onclickCheckBalanceToken = async () => {
+    const TOKEN_ADDRESS = selectToken.address;
+    setTokenOwn(await CheckBalanceToken(defaultAccount, TOKEN_ADDRESS));
+  };
+
   const onclickCheckBalanceNFT = async () => {
-    console.log("TU TU DA");
-    console.log("DUNG CLICK NUA");
-    const NFT_ADDRESS = document.getElementById("nft_address").value
-    console.log(NFT_ADDRESS)
-    // const setBalanceNFT = await CheckBalanceNFT(defaultAccount, NFT_ADDRESS);
-    setNftOwn(await CheckBalanceNFT(defaultAccount, NFT_ADDRESS))
+    const NFT_ADDRESS = document.getElementById("nft_address").value;
+    console.log(NFT_ADDRESS);
+    setNftOwn(await CheckBalanceNFT(defaultAccount, NFT_ADDRESS));
   };
 
   const checkData = () => {
@@ -115,13 +121,33 @@ const WalletCard = () => {
         >
           Check Amount Entry
         </button>
+        <div className="check_balance_token">
+          <span>Choose Token: </span>
+          <select onChange={(e) => setSelectToken(TokenList[e.target.value])}>
+            {TokenList.map((token, index) => (
+              <option value={index} key={token.address}>
+                {token.name}
+              </option>
+            ))}
+          </select>
+          <button
+            className="button_check_entry"
+            onClick={onclickCheckBalanceToken}
+          >
+            Check Balance Token
+          </button>
+          <span>
+            {" "}
+            : {tokenOwn} {selectToken.symbol}
+          </span>
+        </div>
         <div className="check_balance_nft">
-        <span>Contract Collection: </span>
-        <input type="text" id="nft_address"/>
-        <select name="chooseTokenNft" id="token_nft">
-          <option value="aaaaa">ERC721</option>
-          <option value="bbbbb">ERC1155</option>
-        </select>
+          <span>Contract Collection: </span>
+          <input type="text" id="nft_address" />
+          <select name="chooseTokenNft" id="token_nft">
+            <option value="aaaaa">ERC721</option>
+            <option value="bbbbb">ERC1155</option>
+          </select>
           <button
             onClick={onclickCheckBalanceNFT}
             className="button_check_entry"

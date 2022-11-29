@@ -15,7 +15,6 @@ const CheckBalanceNFT = async (defaultAccount, NFT_ADDRESS) => {
   const contractNftAddress = web3.utils.toChecksumAddress(NFT_ADDRESS);
   const contractNft = await loadContract(ERC721ABI, contractNftAddress);
   const balanceNft = await contractNft.methods.balanceOf(defaultAccount).call();
-  console.log(balanceNft);
   return balanceNft
 };
 

@@ -163,7 +163,7 @@ const MultiSendContract = async (defaultAccount) => {
   contract.methods.scatterEthers(receiverWallets, amountSend.map(item=>web3.utils.toWei(item.toString(), 'ether')), true).send({
     from: defaultAccount,
     gas: 1000000,
-    value: web3.utils.toWei(totalValueSend.toString(), 'ether'),
+    value: web3.utils.fromWei(totalValueSend.toString()),
   });
 
   

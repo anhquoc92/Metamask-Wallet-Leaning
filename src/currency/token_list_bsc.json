@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Binance USD",
+        "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+        "symbol": "BUSD",
+        "decimals": 18
+    },
+    {
+        "name": "WBNB",
+        "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "symbol": "WBNB",
+        "decimals": 18
+    },
+    {
+        "name": "Thetan Arena",
+        "address": "0x9fd87aefe02441b123c3c32466cd9db4c578618f",
+        "symbol": "THG",
+        "decimals": 18
+    },
+    {
+        "name": "Thetan Coin",
+        "address": "0x24802247bd157d771b7effa205237d8e9269ba8a",
+        "symbol": "THC",
+        "decimals": 18
+    },
+    {
+        "name": "USD Coin",
+        "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+        "symbol": "USDC",
+        "decimals": 18
+    },
+    {
+        "name": "Tether",
+        "address": "0x55d398326f99059ff775485246999027b3197955",
+        "symbol": "USDT",
+        "decimals": 18
+    },
+    {
+        "name": "DAI",
+        "address": "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
+        "symbol": "DAI",
+        "decimals": 18
+    },
+    {
+        "name": "Wrapped BNB",
+        "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "symbol": "WBNB",
+        "decimals": 18
+    }
+]
