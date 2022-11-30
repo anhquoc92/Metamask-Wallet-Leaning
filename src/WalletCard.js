@@ -6,8 +6,11 @@ import EntryContract from "./blockchain/CheckEntry";
 import CheckAmountEntry from "./blockchain/CheckAmountEntry";
 import MultiSendContract from "./blockchain/MultiSendContract";
 import CheckBalanceNFT from "./blockchain/CheckBalanceNFT.jsx";
-import TokenList from "./currency/token_list_bsc.json";
 import CheckBalanceToken from "./blockchain/CheckBalanceToken.jsx";
+import token_list from "./currency/token_list";
+import { Select, Button } from "antd";
+
+const chainList = ["BNBSmartChain", "Ethereum"];
 
 const WalletCard = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -19,7 +22,20 @@ const WalletCard = () => {
   const [amountBegin, setAmountBegin] = useState("__");
   const [nftOwn, setNftOwn] = useState("__");
   const [tokenOwn, setTokenOwn] = useState("__");
-  const [selectToken, setSelectToken] = useState(TokenList[0]);
+
+  const [chainChange, setChainChange] = useState(token_list[chainList[0]]);
+  const [tokenChange, setTokenChange] = useState(
+    token_list[chainList[0]][0].symbol
+  );
+  const [addressTokenChange, setAddressTokenChange] = useState(token_list[chainList[0]][0].address);
+  const onChainChanged = (value) => {
+    setChainChange(token_list[value]);
+    setTokenChange(token_list[value][0].symbol);
+  };
+  const onTokenChange = (value, id) => {
+    setTokenChange(value);
+    setAddressTokenChange(id.id.address)
+  };
 
   const connectWalletHandler = async () => {
     // check if Metamask is installed
@@ -68,7 +84,7 @@ const WalletCard = () => {
   };
 
   const onclickCheckBalanceToken = async () => {
-    const TOKEN_ADDRESS = selectToken.address;
+    const TOKEN_ADDRESS = addressTokenChange;
     setTokenOwn(await CheckBalanceToken(defaultAccount, TOKEN_ADDRESS));
   };
 
@@ -121,7 +137,39 @@ const WalletCard = () => {
         >
           Check Amount Entry
         </button>
-        <div className="check_balance_token">
+        <div>
+          <Select
+            defaultValue={chainList[0]}
+            onChange={onChainChanged}
+            style={{
+              width: 150,
+            }}
+            options={chainList.map((chains) => ({
+              label: chains,
+              value: chains,
+            }))}
+          />
+          <Select
+            value={tokenChange}
+            onChange={onTokenChange}
+            style={{
+              width: 120,
+            }}
+            options={chainChange.map((token_detail) => ({
+              label: token_detail.symbol,
+              value: token_detail.symbol,
+              id: token_detail,
+            }))}
+          />
+          <Button onClick={onclickCheckBalanceToken}>
+            Check Balance Token
+          </Button>
+          <span>
+            {" "}
+            : {tokenOwn} {tokenChange}
+          </span>
+        </div>
+        {/* <div className="check_balance_token">
           <span>Choose Token: </span>
           <select onChange={(e) => setSelectToken(TokenList[e.target.value])}>
             {TokenList.map((token, index) => (
@@ -140,7 +188,7 @@ const WalletCard = () => {
             {" "}
             : {tokenOwn} {selectToken.symbol}
           </span>
-        </div>
+        </div> */}
         <div className="check_balance_nft">
           <span>Contract Collection: </span>
           <input type="text" id="nft_address" />

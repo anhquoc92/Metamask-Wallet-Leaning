@@ -15,7 +15,6 @@ const CheckBalanceToken = async (defaultAccount, TOKEN_ADDRESS) => {
   const balanceToken = await contractToken.methods.balanceOf(defaultAccount).call();
   console.log(web3.utils.fromWei(balanceToken.toString()));
   const displayBalanceToken = web3.utils.fromWei(balanceToken).toString()
-  console.log(displayBalanceToken)
   return displayBalanceToken
 };
 
