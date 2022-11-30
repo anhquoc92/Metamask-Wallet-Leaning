@@ -5,10 +5,11 @@ import "./WalletCard.css";
 import EntryContract from "./blockchain/CheckEntry";
 import CheckAmountEntry from "./blockchain/CheckAmountEntry";
 import MultiSendContract from "./blockchain/MultiSendContract";
-import CheckBalanceNFT from "./blockchain/CheckBalanceNFT.jsx";
+import CheckBalanceNFT721 from "./blockchain/CheckBalanceNFT721.jsx";
 import CheckBalanceToken from "./blockchain/CheckBalanceToken.jsx";
 import token_list from "./currency/token_list";
-import { Select, Button } from "antd";
+import { Select, Button, Input, InputNumber } from "antd";
+import CheckBalanceNFT1155 from "./blockchain/CheckBalanceNFT1155";
 
 const chainList = ["BNBSmartChain", "Ethereum"];
 
@@ -27,14 +28,26 @@ const WalletCard = () => {
   const [tokenChange, setTokenChange] = useState(
     token_list[chainList[0]][0].symbol
   );
-  const [addressTokenChange, setAddressTokenChange] = useState(token_list[chainList[0]][0].address);
+  const [addressTokenChange, setAddressTokenChange] = useState(
+    token_list[chainList[0]][0].address
+  );
+
+  const [abiNftChange, setAbiNftChange] = useState("ERC721");
+  const { Option } = Select;
+  const onErcChanged = (value) => {
+    console.log(value);
+    setAbiNftChange(value);
+    console.log(value);
+  };
+
   const onChainChanged = (value) => {
     setChainChange(token_list[value]);
     setTokenChange(token_list[value][0].symbol);
   };
   const onTokenChange = (value, id) => {
     setTokenChange(value);
-    setAddressTokenChange(id.id.address)
+    console.log(value);
+    setAddressTokenChange(id.id.address);
   };
 
   const connectWalletHandler = async () => {
@@ -88,10 +101,19 @@ const WalletCard = () => {
     setTokenOwn(await CheckBalanceToken(defaultAccount, TOKEN_ADDRESS));
   };
 
-  const onclickCheckBalanceNFT = async () => {
-    const NFT_ADDRESS = document.getElementById("nft_address").value;
-    console.log(NFT_ADDRESS);
-    setNftOwn(await CheckBalanceNFT(defaultAccount, NFT_ADDRESS));
+  const onclickCheckBalanceNFT_2 = async () => {
+    const NFT_ADDRESS = document.getElementById("input_contract_nft").value;
+    if (abiNftChange === "ERC721") {
+      setNftOwn(await CheckBalanceNFT721(defaultAccount, NFT_ADDRESS));
+    }
+    if (abiNftChange === "ERC1155") {
+      const token_ID = document.getElementById("input_token_id").value;
+      const defaultAccount_2 = "0x2bbebe4f993672e86bde7254dd42654546453f79";
+
+      setNftOwn(
+        await CheckBalanceNFT1155(defaultAccount_2, NFT_ADDRESS, token_ID)
+      );
+    }
   };
 
   const checkData = () => {
@@ -169,41 +191,28 @@ const WalletCard = () => {
             : {tokenOwn} {tokenChange}
           </span>
         </div>
-        {/* <div className="check_balance_token">
-          <span>Choose Token: </span>
-          <select onChange={(e) => setSelectToken(TokenList[e.target.value])}>
-            {TokenList.map((token, index) => (
-              <option value={index} key={token.address}>
-                {token.name}
-              </option>
-            ))}
-          </select>
-          <button
-            className="button_check_entry"
-            onClick={onclickCheckBalanceToken}
-          >
-            Check Balance Token
-          </button>
-          <span>
-            {" "}
-            : {tokenOwn} {selectToken.symbol}
-          </span>
-        </div> */}
+        <br />
         <div className="check_balance_nft">
-          <span>Contract Collection: </span>
-          <input type="text" id="nft_address" />
-          <select name="chooseTokenNft" id="token_nft">
-            <option value="aaaaa">ERC721</option>
-            <option value="bbbbb">ERC1155</option>
-          </select>
-          <button
-            onClick={onclickCheckBalanceNFT}
-            className="button_check_entry"
-          >
-            Check Balance NFT
-          </button>
-          <span> : {nftOwn} NFTs</span>
+          <Input.Group compact>
+            <Select
+              onChange={onErcChanged}
+              style={{ width: 120 }}
+              defaultValue="ERC721"
+            >
+              <Option value="ERC721">ERC721</Option>
+              <Option value="ERC1155">ERC1155</Option>
+            </Select>
+            <Input
+              style={{ width: 320 }}
+              placeholder="Input Contract Collection"
+              id="input_contract_nft"
+            />
+            <InputNumber placeholder="Token_ID" id="input_token_id" />
+          </Input.Group>
+          <Button onClick={onclickCheckBalanceNFT_2}>Check Balance NFT</Button>
+          <span>: {nftOwn} NFT</span>
         </div>
+        <br />
       </div>
       <div className="multiSendDisplay">
         <h2>{"Multi-Sender"}</h2>
